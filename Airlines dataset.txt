@@ -1,0 +1,25 @@
+Perform clustering (Both hierarchical and K means clustering) for the airlines data to obtain optimum number of clusters. 
+Draw the inferences from the clusters obtained.
+
+data<-scale(Airlines[,2:11])
+d<-dist(data,method = "euclidean")
+f<-hclust(d,method = "complete")
+str(f)
+plot(f, hang=-1)
+rect.hclust(f,k=5, border = "red")
+
+KMEANS:
+
+data<-scale(Airlines[,2:11])
+twss<-NULL
+for(i in 2:11){
+  twss<-c(twss,kmeans(data,i)$tot.withinss) #Finding best k
+}
+twss
+plot(2:11,twss,type = "o")
+
+#k=7
+
+k_7<-kmeans(data,7)
+data$cluster<-as.matrix(k_7$cluster)
+aggregate(data[,-c(1:11)],by=list(data$cluster),mean)
